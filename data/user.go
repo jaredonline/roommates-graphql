@@ -2,31 +2,41 @@ package data
 
 import (
 	"log"
+	"time"
 	// external
 	"gopkg.in/gorp.v1"
 )
 
-type User struct {
-	Id        int    `json:"id" db:"id"`
-	FirstName string `json:"first_name" db:"first_name"`
-	LastName  string `json:"last_name" db:"last_name"`
-	Age       int    `json:"age" db:"age"`
+type Person struct {
+	Id        int       `json:"id" db:"id"`
+	Name      string    `json:"name" db:"name"`
+	UpdatedAt time.Time `json:"updated_at" db:"updated_at"`
+	CreatedAt time.Time `json:"created_at" db:"created_at"`
+	Email     string    `json:"email" db:"email"`
 }
 
-func GetUserById(dbMap *gorp.DbMap, queryID int) interface{} {
-	user := User{}
+func GetPerson(dbMap *gorp.DbMap, queryID int) interface{} {
+	user := Person{}
 	err := dbMap.SelectOne(&user, "SELECT * FROM users WHERE id=$1", queryID)
 	if err != nil {
-		log.Fatal("Unable to select user with id '", queryID, "': ", err)
+		if gorp.NonFatalError(err) {
+			log.Print("Unable to select user with id '", queryID, "': ", err)
+		} else {
+			log.Fatal("Unable to select user with id '", queryID, "': ", err)
+		}
 	}
 	return user
 }
 
-func GetAllUsers(dbMap *gorp.DbMap) []interface{} {
-	var u []User
-	_, err := dbMap.Select(&u, "SELECT * FROM users")
+func GetAllPeople(dbMap *gorp.DbMap) []interface{} {
+	var u []Person
+	_, err := dbMap.Select(&u, "SELECT * FROM people")
 	if err != nil {
-		log.Fatal("Unable to select all users: ", err)
+		if gorp.NonFatalError(err) {
+			log.Print("Unable to select all users: ", err)
+		} else {
+			log.Fatal("Unable to select all users: ", err)
+		}
 	}
 	users := make([]interface{}, len(u))
 	for key, value := range u {

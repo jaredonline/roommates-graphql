@@ -17,6 +17,6 @@ func main() {
 	})
 
 	fmt.Println("Now server is running on port 8888")
-	fmt.Println("Test with Get      : curl -g 'http://localhost:8888/graphql?query={users{first_name}}'")
+	fmt.Println("Test with Get      : curl -g 'http://localhost:8888/graphql?query={people{name email}}'")
 	http.ListenAndServe(":8888", nil)
 }

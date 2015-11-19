@@ -32,7 +32,7 @@ func InitDB(env string) (*gorp.DbMap, error) {
 	}
 
 	dbMap := &gorp.DbMap{Db: db, Dialect: gorp.PostgresDialect{}}
-	dbMap.AddTableWithName(User{}, "users").SetKeys(true, "Id")
+	dbMap.AddTableWithName(Person{}, "people").SetKeys(true, "Id")
 
 	return dbMap, nil
 }

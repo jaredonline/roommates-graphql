@@ -22,17 +22,17 @@ var (
 func init() {
 	dbMap, err = data.InitDB("development")
 	fields = graphql.Fields{
-		"users": &graphql.Field{
-			Type: graphql.NewList(types.User),
+		"people": &graphql.Field{
+			Type: graphql.NewList(types.Person),
 			Resolve: func(p graphql.ResolveParams) interface{} {
-				return data.GetAllUsers(dbMap)
+				return data.GetAllPeople(dbMap)
 			},
 		},
-		"user": &graphql.Field{
-			Type: types.User,
+		"person": &graphql.Field{
+			Type: types.Person,
 			Resolve: func(p graphql.ResolveParams) interface{} {
 				if idQuery, isOK := p.Args["id"].(int); isOK {
-					return data.GetUserById(dbMap, idQuery)
+					return data.GetPerson(dbMap, idQuery)
 				}
 				return nil
 			},
