@@ -22,10 +22,10 @@ var userType = graphql.NewObject(
 				Type: graphql.String,
 			},
 			"age": &graphql.FieldConfig{
-				Type: graphql.String,
+				Type: graphql.Int,
 			},
 			"id": &graphql.FieldConfig{
-				Type: graphql.String,
+				Type: graphql.Int,
 			},
 		},
 	},
@@ -37,10 +37,10 @@ var (
 )
 
 type User struct {
-	ID        string `json:"id"`
+	ID        int    `json:"id"`
 	FirstName string `json:"first_name"`
 	LastName  string `json:"last_name"`
-	Age       string `json:"age"`
+	Age       int    `json:"age"`
 }
 
 func getUsers() []interface{} {
@@ -62,10 +62,10 @@ func getUsers() []interface{} {
 		rows.Scan(&id, &firstName, &lastName, &age)
 
 		users = append(users, User{
-			ID:        fmt.Sprintf("%d", id),
+			ID:        id,
 			FirstName: firstName,
 			LastName:  lastName,
-			Age:       fmt.Sprintf("%d", age),
+			Age:       age,
 		})
 	}
 
