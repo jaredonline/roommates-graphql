@@ -21,7 +21,7 @@ var (
 
 func init() {
 	dbMap, err = data.InitDB("development")
-	fields := graphql.Fields{
+	fields = graphql.Fields{
 		"users": &graphql.Field{
 			Type: graphql.NewList(types.User),
 			Resolve: func(p graphql.ResolveParams) interface{} {
