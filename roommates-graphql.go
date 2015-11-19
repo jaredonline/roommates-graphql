@@ -10,6 +10,7 @@ import (
 	// external
 	"github.com/graphql-go/graphql"
 	_ "github.com/lib/pq"
+	"gopkg.in/gorp.v1"
 	"gopkg.in/yaml.v2"
 )
 
@@ -34,41 +35,35 @@ var userType = graphql.NewObject(
 )
 
 var (
-	db  *sql.DB
-	err error
+	dbMap *gorp.DbMap
+	err   error
 )
 
 type User struct {
-	ID        int    `json:"id"`
-	FirstName string `json:"first_name"`
-	LastName  string `json:"last_name"`
-	Age       int    `json:"age"`
+	Id        int    `json:"id" db:"id"`
+	FirstName string `json:"first_name" db:"first_name"`
+	LastName  string `json:"last_name" db:"last_name"`
+	Age       int    `json:"age" db:"age"`
+}
+
+func getUser(queryID int) interface{} {
+	user := User{}
+	err := dbMap.SelectOne(&user, "SELECT * FROM users WHERE id=$1", queryID)
+	if err != nil {
+		log.Fatal("Unable to select user with id '", queryID, "': ", err)
+	}
+	return user
 }
 
 func getUsers() []interface{} {
-	users := make([]interface{}, 0)
-
-	rows, err := db.Query("SELECT * FROM users")
+	var u []User
+	_, err := dbMap.Select(&u, "SELECT * FROM users")
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("Unable to select all users: ", err)
 	}
-
-	for rows.Next() {
-		var (
-			id        int
-			firstName string
-			lastName  string
-			age       int
-		)
-
-		rows.Scan(&id, &firstName, &lastName, &age)
-
-		users = append(users, User{
-			ID:        id,
-			FirstName: firstName,
-			LastName:  lastName,
-			Age:       age,
-		})
+	users := make([]interface{}, len(u))
+	for key, value := range u {
+		users[key] = value
 	}
 
 	return users
@@ -124,24 +119,15 @@ func main() {
 	}
 
 	// open our db connection
-	db, err = sql.Open("postgres", fmt.Sprintf("user=%s dbname=%s sslmode=disable", dbConfig.Environments["development"].User, dbConfig.Environments["development"].Database))
+	db, err := sql.Open("postgres", fmt.Sprintf("user=%s dbname=%s sslmode=disable", dbConfig.Environments["development"].User, dbConfig.Environments["development"].Database))
 	if err != nil {
 		log.Fatal("Could not open database connection: ", err)
 	}
 
+	dbMap = &gorp.DbMap{Db: db, Dialect: gorp.PostgresDialect{}}
+	dbMap.AddTableWithName(User{}, "users").SetKeys(true, "Id")
+
 	fields := graphql.Fields{
-		"hello": &graphql.Field{
-			Type: graphql.String,
-			Resolve: func(p graphql.ResolveParams) interface{} {
-				return "world"
-			},
-		},
-		"foo": &graphql.Field{
-			Type: graphql.String,
-			Resolve: func(p graphql.ResolveParams) interface{} {
-				return "bar"
-			},
-		},
 		"users": &graphql.Field{
 			Type: graphql.NewList(userType),
 			Resolve: func(p graphql.ResolveParams) interface{} {
@@ -151,7 +137,15 @@ func main() {
 		"user": &graphql.Field{
 			Type: userType,
 			Resolve: func(p graphql.ResolveParams) interface{} {
-				return getUsers()[0]
+				if idQuery, isOK := p.Args["id"].(int); isOK {
+					return getUser(idQuery)
+				}
+				return nil
+			},
+			Args: graphql.FieldConfigArgument{
+				"id": &graphql.ArgumentConfig{
+					Type: graphql.Int,
+				},
 			},
 		},
 	}
@@ -174,10 +168,12 @@ func main() {
 	query := `
 		query GetUsers {
 			users {
+				id
 				first_name
 				last_name
 				age
 			}
+			user(id:1) { first_name }
 		}
 	`
 
