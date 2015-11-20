@@ -21,6 +21,7 @@ var (
 
 func init() {
 	dbMap, err = data.InitDB("development")
+
 	fields = graphql.Fields{
 		"people": &graphql.Field{
 			Type: graphql.NewList(types.Person),

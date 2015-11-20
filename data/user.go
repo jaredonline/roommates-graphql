@@ -17,10 +17,10 @@ type Person struct {
 
 func GetPerson(dbMap *gorp.DbMap, queryID int) interface{} {
 	user := Person{}
-	err := dbMap.SelectOne(&user, "SELECT * FROM users WHERE id=$1", queryID)
+	err := dbMap.SelectOne(&user, "SELECT * FROM people WHERE id=$1", queryID)
 	if err != nil {
 		if gorp.NonFatalError(err) {
-			log.Print("Unable to select user with id '", queryID, "': ", err)
+			log.Print("Ran into some trouble getting person with ID: '", queryID, "': ", err)
 		} else {
 			log.Fatal("Unable to select user with id '", queryID, "': ", err)
 		}
@@ -33,7 +33,7 @@ func GetAllPeople(dbMap *gorp.DbMap) []interface{} {
 	_, err := dbMap.Select(&u, "SELECT * FROM people")
 	if err != nil {
 		if gorp.NonFatalError(err) {
-			log.Print("Unable to select all users: ", err)
+			log.Print("Ran into some trouble getting all people: ", err)
 		} else {
 			log.Fatal("Unable to select all users: ", err)
 		}

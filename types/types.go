@@ -18,6 +18,9 @@ var Person = graphql.NewObject(
 			"id": &graphql.Field{
 				Type: graphql.Int,
 			},
+			"updated_at": &graphql.Field{
+				Type: graphql.String,
+			},
 		},
 	},
 )
