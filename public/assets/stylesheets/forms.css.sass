@@ -1,0 +1,66 @@
+@import '_mixins'
+
+form
+  font-size: 18px
+
+  [class*="input"]
+    clear: both
+
+  .field_with_errors
+    display: inline
+    color: red
+
+  .inline-input
+    font-family: $mensch
+
+    label
+      display: block
+
+  .block-input
+    font-family: $mensch
+
+    label
+      text-align: right
+      display:    block
+      width:      $px-column-width * 3
+
+    .control-array
+      margin-left:   $px-column-width * 3
+      margin-bottom: 20px
+
+      .control
+        float: left
+        width: $px-column-width
+
+        label
+          text-align:  left
+          display:     inline
+          font-familY: $mission-script
+          font-weight: bold
+
+  .input
+    &.center
+      text-align: center
+
+    & > button
+      font-family: $mensch
+
+    & > label, & > .field_with_errors > label
+      font-family: $mensch
+      &.top
+        vertical-align: top
+
+      display: inline-block
+      width:   $px-column-width * 3
+      text-align: right
+      margin:
+        right:  10px
+        bottom: 10px
+
+
+    &.small
+      & > label, & > .field_with_errors > label
+        width: $px-column-width * 1
+
+    .control-array
+      display: inline-block

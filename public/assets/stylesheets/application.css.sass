@@ -1,0 +1,285 @@
+//= require 'style'
+//= require 'pages'
+//= require 'fonts'
+//= require 'bootstrap'
+//= require_self
+//= require 'forms'
+
+@import '_mixins'
+
+body
+  padding-top:      20px
+  background-color: $body-bg
+  color:            $dark-gray
+
+  p
+    font-size: 18px
+    font-family: $mensch
+    margin: 10px 0
+
+  span.thin
+    font-family: $mensch-thin
+    font-weight: bold
+
+  .container
+    @include container
+
+  .clearfix
+    clear: both
+
+  .three-quarter-container
+    @include container
+    width: ($layout-width / 4) * 3
+
+  .half-container
+    @include container
+    width: ($layout-width / 3) * 2
+
+  [class*="container"]
+    &.bounded
+      @include box-shadow(0 3px 3px rgba(100, 100, 100, 0.4))
+      border:           5px solid $yellow
+      border-radius:    15px
+      background-color: $light-blue
+      padding:          30px
+
+  .no-border
+    border: none !important
+
+  .dark
+    background-color: $med-blue !important
+
+  [class*='span']
+    float: left
+
+  @for $i from 1 through $num-columns
+    .span#{$i}
+      width: $px-column-width * $i
+
+    .offset#{$i}
+      margin-left: $px-column-width * $i
+
+  .homepage-caption
+    font-family: $mensch
+    font-size:   20px
+    width:       90px
+    padding:     10px
+    text-align:  center
+    margin:      -240px auto 140px auto
+
+    a
+      color: $orange
+      text-decoration: none
+
+  #buy-stuff
+    @include bg-image-2x('/assets/icons/milk', 121px, 124px)
+    background:
+      position: center center
+      repeat: no-repeat
+    padding-top: 200px
+    text-align: center
+    font-family: $mensch
+    font-size: 16px
+
+  #share-it
+    @include bg-image-2x('/assets/icons/dinner', 188px, 193px)
+    background:
+      position: center center
+      repeat: no-repeat
+    padding-top: 200px
+    text-align: center
+    font-family: $mensch
+    font-size: 16px
+
+  #profit
+    padding-top: 100px
+    text-align: center
+
+    h5
+      font-family: $mission-script
+      font-size: 32px
+      padding-bottom: 58px
+
+    p
+      font-family: $mensch
+      font-size: 16px
+
+  header
+    text-align: center
+    margin-bottom: 50px
+
+    h1
+      @include auto-center
+      font-family:   $mission-script
+      font-size:     46px
+      color:         $orange
+      width:         365px
+      height:        74px
+      padding-top:   16px
+      padding-left:  15px
+      margin-bottom: 20px
+
+      @include bg-image-2x('/assets/icons/header', 380px, 94px)
+      background:
+        position: top left
+        repeat:   no-repeat
+
+      a
+        color:           $orange !important
+        text-decoration: none
+
+    h3
+      font-family: $mensch-thin
+      font-size:   20px
+
+  h3
+    &.ribbon-header
+      @include auto-center
+      font-family:   $mission-script
+      font-size:     20px
+      color:         $orange
+      width:         209px
+      height:        36px
+      padding-top:   10px
+      margin-bottom: 20px
+      text-align:    center
+
+      @include bg-image-2x('/assets/icons/recent-expenses-banner', 209px, 36px)
+      background:
+        position: top left
+        repeat:   no-repeat
+
+  .footer-link
+    margin-top:      15px
+    font-family:     $mission-script
+    font-size:       18px
+
+    a
+      color:           $dark-gray
+      text-decoration: none
+
+  .login-container
+    margin-top:  -100px
+    font-family: $mission-script
+
+    #login-icon
+      @include bg-image-2x('/assets/icons/user-icon', 27px, 31px)
+      background:
+        position: center 9px
+        repeat: no-repeat
+        color: $yellow
+      height: 50px
+      width:  50px
+      border-radius: 25px
+      float: left
+
+    .login
+      width: 75%
+      padding-top: 10px
+      a
+        color:       $orange
+        font-size:   24px
+
+  section
+    @include box-shadow(0 3px 3px rgba(0, 0, 0, 0.1) inset)
+    min-height: 30px
+    padding-bottom: 30px
+
+    &.bounded
+      @include box-shadow(none)
+
+    &.first
+      @include box-shadow(0 -3px 3px rgba(100, 100, 100, 0.1))
+
+    &.light
+      border-bottom:    1px solid $body-bg
+      background-color: $light-blue
+
+    &.dark
+      padding-top: 20px
+
+      h4
+        background-color: $dark-blue
+        margin:
+          top: 0
+          bottom: 20px
+        text-align: center
+        font:
+          family: $mensch-thin
+          size:   24px
+        padding: 5px
+
+    &.dotted
+      background-color: $light-blue
+      font-family:      $mensch-inline
+      color:            $dark-gray
+      text-align:       center
+      font-size:        24px
+      min-height:       270px
+
+      p
+        padding-top: 100px
+
+      @include bg-image-2x('/assets/icons/dots-pattern', 255px, 75px)
+      background:
+        position: top left
+
+  .balances
+    .balance
+      .balance-name
+        font:
+          family: $mensch
+          size:   18px
+
+      .balance-amount
+        font:
+          family: $mission-script
+          size:   18px
+
+  .currency
+    font-family: $mission-script
+    font-weight: bold
+
+  $list: expense payment
+  @each $type in $list
+    .#{$type}s
+      .#{$type}
+        border-bottom: 1px dashed $dark-gray
+        margin-bottom: 10px
+        margin-left:   50px
+        height:        40px
+
+        .#{$type}-date
+          font:
+            family: $mensch
+            size:   12px
+          text-align:       center
+          float:            left
+          background-color: $light-blue
+          width:            20px
+          height:           23px
+          border-radius:    25px
+          margin-left:      -50px
+          padding:          4px 5px
+
+
+        .#{$type}-description
+          font-family: $mensch
+          font-size:   18px
+          display:     inline-block
+          margin-top:  6px
+
+        .#{$type}-notes, .#{$type}-small
+          font-family: $mensch
+          font-size:   14px
+          display:     inline-block
+
+        .#{$type}-amount
+          font-family: $mission-script
+          font-size:   20px
+          float:       right
+          text-align:  right
+
+          .#{$type}-share
+            font-family: $mensch
+            font-size:   14px

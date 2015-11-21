@@ -2,3 +2,7 @@
 node_modules
 npm-debug.log
 data/schema.graphql
+db/config.yml
+old-code/
+old-code/*
+graphql

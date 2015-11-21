@@ -1,0 +1,17 @@
+@import '_mixins'
+
+h2.ribbon-header
+  @include auto-center
+  font-family:   $mission-script
+  font-size:     30px
+  color:         $orange
+  width:         315px
+  height:        53px
+  padding-top:   12px
+  margin-bottom: 20px
+  text-align:    center
+
+  @include bg-image-2x('/assets/icons/add-new-banner', 315px, 53px)
+  background:
+    position: top left
+    repeat:   no-repeat

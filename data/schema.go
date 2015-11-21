@@ -1,34 +1,51 @@
 package data
 
 import (
+	//internal
+	"github.com/jaredonline/roommates-graphql/entities"
+
+	//external
 	"github.com/graphql-go/graphql"
-	"github.com/graphql-go/relay"
+	"gopkg.in/gorp.v1"
 )
 
 var (
-	postType  *graphql.Object
-	queryType *graphql.Object
-	Schema    graphql.Schema
+	Schema graphql.Schema
+
+	DbMap *gorp.DbMap
+	err   error
 )
 
 func init() {
-	postType = graphql.NewObject(graphql.ObjectConfig{
-		Name: "Post",
-		Fields: graphql.Fields{
-			"id": relay.GlobalIDField("Post", nil),
-			"text": &graphql.Field{
-				Type: graphql.String,
-			},
-		},
-	})
+	DbMap, err = InitDB("development")
 
-	queryType = graphql.NewObject(graphql.ObjectConfig{
+	queryType := graphql.NewObject(graphql.ObjectConfig{
 		Name: "Query",
 		Fields: graphql.Fields{
-			"latestPost": &graphql.Field{
-				Type: postType,
+			"me": &graphql.Field{
+				Type: Person,
 				Resolve: func(p graphql.ResolveParams) interface{} {
-					return GetLatestPost()
+					return entities.GetPerson(DbMap, 1)
+				},
+			},
+			"people": &graphql.Field{
+				Type: graphql.NewList(Person),
+				Resolve: func(p graphql.ResolveParams) interface{} {
+					return entities.GetAllPeople(DbMap)
+				},
+			},
+			"person": &graphql.Field{
+				Type: Person,
+				Resolve: func(p graphql.ResolveParams) interface{} {
+					if idQuery, isOK := p.Args["id"].(int); isOK {
+						return entities.GetPerson(DbMap, idQuery)
+					}
+					return nil
+				},
+				Args: graphql.FieldConfigArgument{
+					"id": &graphql.ArgumentConfig{
+						Type: graphql.Int,
+					},
 				},
 			},
 		},

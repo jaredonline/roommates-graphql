@@ -3,9 +3,28 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Relay • Starter Kit</title>
+    <title>MyRoommate</title>
+    <link href="/css/application.css" media="screen" rel="stylesheet" type="text/css"/>
   </head>
   <body>
+    <header>
+        <div class='container'>
+            <h1>
+                <a href="/">MyRoommate</a>
+            </h1>
+            <div class='span2 offset9'>
+                <a href='/logout'>
+                    <div class='login-container'>
+                        <div id='login-icon'></div>
+                            <div class='login'>
+                                Hi, Jared McFarland
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </header>
     <div id="root"></div>
     <script type="text/javascript">
       // Force `fetch` polyfill to workaround Chrome not displaying request body
