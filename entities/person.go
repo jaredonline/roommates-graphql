@@ -50,17 +50,22 @@ func GetAllPeople(dbMap *gorp.DbMap) []interface{} {
 }
 
 func GetPersonsRoommates(dbMap *gorp.DbMap, person Person) []interface{} {
-	var u []Person
-	_, err := dbMap.Select(&u, "SELECT * FROM people WHERE people.house_id = $1 AND people.id <> $2", person.HouseId, person.Id)
-	if err != nil {
-		if gorp.NonFatalError(err) {
-			log.Print("Ran into some trouble getting all people: ", err)
-		} else {
-			log.Fatal("Unable to select all users: ", err)
+	if len(person.Roommates) == 0 {
+		var u []Person
+		_, err := dbMap.Select(&u, "SELECT * FROM people WHERE people.house_id = $1 AND people.id <> $2", person.HouseId, person.Id)
+		if err != nil {
+			if gorp.NonFatalError(err) {
+				log.Print("Ran into some trouble getting all people: ", err)
+			} else {
+				log.Fatal("Unable to select all users: ", err)
+			}
 		}
+
+		person.Roommates = u
 	}
-	users := make([]interface{}, len(u))
-	for key, value := range u {
+
+	users := make([]interface{}, len(person.Roommates))
+	for key, value := range person.Roommates {
 		users[key] = value
 	}
 

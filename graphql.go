@@ -1,14 +1,17 @@
 package main
 
 import (
-	"github.com/graphql-go/handler"
-	"github.com/jaredonline/roommates-graphql/data"
 	"log"
 	"net/http"
+
+	//internal
+	"github.com/jaredonline/roommates-graphql/data"
+
+	// external
+	"github.com/graphql-go/handler"
 )
 
 func main() {
-
 	// simplest relay-compliant graphql server HTTP handler
 	h := handler.New(&handler.Config{
 		Schema: &data.Schema,
