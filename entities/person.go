@@ -9,13 +9,17 @@ import (
 )
 
 type Person struct {
-	Id        int       `json:"id" db:"id"`
-	HouseId   int       `json:"house_id" db:"house_id"`
-	Name      string    `json:"name" db:"name"`
+	Id      int    `json:"id" db:"id"`
+	HouseId int    `json:"house_id" db:"house_id"`
+	Name    string `json:"name" db:"name"`
+	Email   string `json:"email" db:"email"`
+
 	UpdatedAt time.Time `json:"updated_at" db:"updated_at"`
 	CreatedAt time.Time `json:"created_at" db:"created_at"`
-	Email     string    `json:"email" db:"email"`
-	Roommates []Person  `json:"roommates"`
+
+	// associations
+	Roommates []Person `json:"roommates"`
+	House     House    `json:"house"`
 }
 
 func GetPerson(dbMap *gorp.DbMap, queryID int) interface{} {

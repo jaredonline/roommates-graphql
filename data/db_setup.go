@@ -38,6 +38,7 @@ func InitDB(env string) (*gorp.DbMap, error) {
 		log.Fatal("Could not open database connection: ", err)
 	}
 
+	// TODO: this directly calls into postgres
 	dbMap := &gorp.DbMap{Db: db, Dialect: gorp.PostgresDialect{}}
 	dbMap.AddTableWithName(entities.Person{}, "people").SetKeys(true, "Id")
 

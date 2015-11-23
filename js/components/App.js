@@ -1,37 +1,12 @@
 import React from 'react';
 import Relay from 'react-relay';
-import PersonBalance from './PersonBalance';
+import Balances from './Balances';
 
 class App extends React.Component {
   render() {
     return (
         <div>
-            <section className="bounded">
-                <div className="three-quarter-container bounded no-border">
-                    <div className="span4">
-                        <h3 className="ribbon-header">I currently owe</h3>
-                        <div className="balances">
-                            {
-                                this.props.me.roommates.map(function(roommate) {
-                                    return <PersonBalance key={roommate.id} person={roommate} />
-                                })
-                            }
-                        </div>
-                    </div>
-                    <div className="span4 offset1">
-                        <h3 className="ribbon-header">My roommates owe me</h3>
-                        <div className="balances">
-                            {
-                                this.props.me.roommates.map(function(roommate) {
-                                    return <PersonBalance key={roommate.id} person={roommate} />
-                                })
-                            }
-                        </div>
-                    </div>
-                    <div className="clearfix"></div>
-                </div>
-            </section>
-
+            <Balances key={this.props.me.id} person={this.props.me} />
             <section className="bounded">
                 <div className="three-quarter-container bounded no-border dark">
                     <div className='add-new-link'>
@@ -77,11 +52,7 @@ export default Relay.createContainer(App, {
   fragments: {
     me: () => Relay.QL`
         fragment on Person {
-            name
-            roommates {
-                id
-                ${PersonBalance.getFragment('person')}
-            }
+            ${Balances.getFragment('person')}
         }
     `,
   },
